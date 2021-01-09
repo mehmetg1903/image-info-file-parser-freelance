@@ -1,1 +1,7 @@
 venv
+
+config/bexar.ini
+config/collin.ini
+config/tarrant.ini
+
+config/create_table.sql
