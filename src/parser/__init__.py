@@ -1,0 +1,1 @@
+from ..util.string_helper import remove_multiple_spaces

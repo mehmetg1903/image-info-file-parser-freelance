@@ -1,0 +1,6 @@
+configparser==3.7.4
+numpy==1.19.4
+pandas==1.1.5
+pymssql==2.1.5
+pysftp==0.2.9
+xmltodict==0.12.0
