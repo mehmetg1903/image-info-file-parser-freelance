@@ -1,6 +1,15 @@
 # Image Index Parser
 
-Tarrant County Assumed Names Parser
+County Image Parser
+
+###Running with Docker
+Create image and run.
+
+```
+$ docker build . -t image-parser
+$ docker run -i -t --net=host --name=image-parser-cont -v ${pwd}/config:application/config image-parser
+```
+
 
 ### Requirements
 
