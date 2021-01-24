@@ -2,7 +2,7 @@
 
 County Image Parser
 
-###Running with Docker
+### Running with Docker
 
 ```
 $ docker build . -t image-parser
