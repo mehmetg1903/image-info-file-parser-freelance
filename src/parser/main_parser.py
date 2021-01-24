@@ -27,20 +27,32 @@ class MainParser:
 
     def _prepare_parser(self):
         if self._parser_type == ParserType.Tarrant:
-            self._parser = TarrantParser("../tmp/" + self._parser_config["FILE_SERVER"]["parse_file"])
+            self._parser = TarrantParser(
+                self._main_config["GENERAL"]["download_folder"] + self._parser_config["FILE_SERVER"]["parse_file"])
         elif self._parser_type == ParserType.Collin:
-            self._parser = CollinParser("../tmp/" + self._parser_config["FILE_SERVER"]["parse_file"])
+            self._parser = CollinParser(
+                self._main_config["GENERAL"]["download_folder"] + self._parser_config["FILE_SERVER"]["parse_file"])
         elif self._parser_type == ParserType.Bexar:
-            self._parser = BexarParser("../tmp/" + self._parser_config["FILE_SERVER"]["parse_file"])
+            self._parser = BexarParser(
+                self._main_config["GENERAL"]["download_folder"] + self._parser_config["FILE_SERVER"]["parse_file"])
 
     def parse(self):
-        tmp_path = pathlib.Path("../tmp")
+        tmp_path = pathlib.Path(self._main_config["GENERAL"]["download_folder"])
         tmp_path.mkdir(parents=True, exist_ok=True)
         self._load_parser_config()
-        file_downloader = FileDownloader(**self._parser_config["FILE_SERVER"])
-        file_downloader.operate()
-        self._prepare_parser()
-        self._db = DB(self._parser_config["TABLE"]["name"], **self._main_config["DB"])
-        self._parser.parse(self._db)
+        file_downloader = FileDownloader(self._main_config["GENERAL"]["download_folder"],
+                                         **self._parser_config["FILE_SERVER"])
+
+        if not eval(self._main_config["GENERAL"]["all"]):
+            file_downloader.operate()
+            self._prepare_parser()
+            self._db = DB(self._parser_config["TABLE"]["name"], **self._main_config["DB"])
+            self._parser.parse(self._db)
+
+        else:
+            for _ in file_downloader.operate_for_all():
+                self._prepare_parser()
+                self._db = DB(self._parser_config["TABLE"]["name"], **self._main_config["DB"])
+                self._parser.parse(self._db)
         self._db.close()
         shutil.rmtree(tmp_path)

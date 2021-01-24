@@ -23,30 +23,33 @@ $ docker run -i -t --net=host --name=image-parser-cont -v ${pwd}/config:applicat
 ```
 [DB]
 server = 127.0.0.1
-username = SA 
-password = Mg.13579 
-# This makes column unique. You may need to use it once. True,1 -> true values. False,0 -> false values
-prevent_duplicate = 0 
+username = SA
+password = Mg.13579
+prevent_duplicate = 1
+
+[GENERAL]
+all = 1
+download_folder = ../tmp/
 
 [SOURCE]
-name = collin
+name = tarrant
 ```
 > You should fill correct DB information here.
 
 #### Source contents
 ```
 [TABLE]
-name = Seminar.dbo.Tarrant
+name = dbo.Example
 
 [FILE_SERVER]
-host = tcftp.tarrantcounty.com
-username = cceai
-password = Pr0gre$$
+host = ftp.example.com
+username = example
+password = example
 # If True or 1, then it uses SFTP, else it uses FTP
 use_ssl = True
 # This is the root path. We can make it empty. In that case, ftp server default path will be used.
-# Empty is working. If you want to set it anyway, this is the example usage: folder = /Home/cceai/
-folder = 
+# Empty is working. If you want to set it anyway, this is the example usage: folder = /Home/example/
+folder = /Home/example
 parse_file = assumed_names.txt
 ```
 
@@ -54,15 +57,8 @@ parse_file = assumed_names.txt
 ### Running
 
 ```
-$ pip3 install virtualenv
-$ python3 -m virtualenv venv
-$ pip3 install -r requirements.txt
-$ cd src
-$ python3 app.py
-```
-After the creation of run environment, config.ini should be checked for connection information.
-```
-$ python parser.py
+$ docker build . -t image-parser
+$ docker run --net=host -v $(pwd)/config:/config image-parser
 ```
 
 #### requirements.txt
